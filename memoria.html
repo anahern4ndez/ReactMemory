@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <title>¡Memoria!</title>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+    class Card extends React.Component{
+        render(){
+            const style = {
+                backgroundColor: 'red',
+                width: '40px',
+                height: '40px',
+                position: 'absolute'
+            }
+            return <div style={style} />
+        }
+    }
+    class Container extends React.Component{
+        render(){
+            const style = {
+                backgroundColor: 'green',
+                width: '1200px',
+                height: '1200px',
+                /*display: 'grid',
+                grid-gap: '30px 5%';
+                grid-template-columns: '30% 30% 30%';*/
+            }
+        }
+        return(){
+            <div style={style}>
+                < Card/>
+            </div>
+        }
+    }
+    ReactDOM.render(
+        < Container />,
+        document.getElementById('root')
+    );
+    </script>
+</body>
+</html>
