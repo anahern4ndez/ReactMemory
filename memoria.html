@@ -17,7 +17,8 @@
             super(props);
             this.state = {
                 isTurned: true,
-                rotate : 0
+                rotate : 0,
+                image: `${this.props.cardImage}`,
             };
             // This binding is necessary to make `this` work in the callback
             this.handleClick = this.handleClick.bind(this);
@@ -25,7 +26,7 @@
         handleClick(event) {
             this.setState(state => ({
                 isTurned: !state.isTurned,
-                rotate: (state.rotate + 180)
+                rotate: (state.rotate + 180),
             }));
             //console.log(event.currentTarget.style);
             
@@ -39,7 +40,6 @@
                 borderRadius: '20px',
                 transformStyle: 'preserve-3d',
                 transition: 'all 0.8s ease',
-                /*transform: [{rotate: '-180deg'},],*/
                 transform: `rotateY(${this.state.rotate}deg)`,
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -51,7 +51,9 @@
                 borderRadius: '20px',
                 backfaceVisibility: 'hidden',
                 background: 'blue',
-                color: '#333',
+                //color: '#333',
+                backgroundImage: `url(images/happy.png)`,
+                backgroundSize: '100% 100%',
             }
             const back = {
                 position: 'absolute',
@@ -59,12 +61,11 @@
                 height: '90%',
                 borderRadius: '20px',
                 backfaceVisibility: 'hidden',
-                color: '#333',
+                //color: '#333',
                 background: 'red',
-                backgroundImage: `url(images/happy_banana.png)`,
+                backgroundImage: `url(${this.state.image})`,
                 backgroundSize: '100% 100%',
-                transform: [{ rotateX: '45deg' }, { rotateZ: '0.785398rad' }],
-                /*transform: [{rotateY: '180deg'},],*/
+                transform: `rotateY(180deg)`,
             }
             return (
                 <div style={style} onClick={this.handleClick}>
@@ -74,12 +75,41 @@
             )
         }
     }
-    class Container extends React.Component{
+    class Game extends React.Component{
+        constructor(props) {
+            super(props);
+            this.state = {
+                cardImages: [
+                    'images/happy_banana.png', 
+                    'images/happy_boy.png', 
+                    'images/happy_cat.png', 
+                    'images/happy_gp.png', 
+                    'images/happy_girl.png', 
+                    'images/happy_bunny.png', 
+                    'images/happy_dog.png', 
+                    'images/happy_banana.png', 
+                    'images/happy_watermelon.png', ]
+            };
+            // This binding is necessary to make `this` work in the callback
+            this.createCards = this.createCards.bind(this);
+            this.generateRandom = this.generateRandom.bind(this);
+        }
+        generateRandom(){
+            return Math.floor((Math.random() * this.state.cardImages.length) + 0)
+        }
+        createCards(){
+            const cards = []
+            for (let i = 0; i < 16; i++) {
+                const index = this.generateRandom()
+                cards.push(<Card cardImage={this.state.cardImages[index]} key={i}/>)
+            }
+            return cards
+        }
         render(){
             const style = {
                 backgroundColor: 'green',
                 width: '1200px',
-                height: '700px',
+                height: '1200px',
                 display: 'grid',
                 gridGap: '2% 2%',
                 gridTemplateColumns: '20% 20% 20% 20%',
@@ -89,20 +119,13 @@
             
         return(
               <div style={style}>
-                  < Card/>
-                  < Card/>
-                  < Card/>
-                  < Card/>
-                  < Card/>
-                  < Card/>
-                  < Card/>
-                  < Card/>
+                  {this.createCards()}
               </div>
             )
         }
     }
     ReactDOM.render(
-        < Container />,
+        < Game />,
         document.getElementById('root')
     );
     </script>
