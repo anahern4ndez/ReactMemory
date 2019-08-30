@@ -103,7 +103,7 @@
                     'images/happy_dog.png', 
                     'images/happy_gm.png', ],
                 cardLayout: Array(16).fill(null),
-                turnedCards: Array(16).fill(null),
+                turnedCards: Array(16).fill(false),
                 movements: 0,
                 selected : [],
             };
@@ -130,6 +130,7 @@
         }
         onCardClick(cardClicked, imageValue){
             let match = true
+            const cards = this.state.turnedCards.slice()
             //verificacion si la carta es match 
             const selectedCards = this.state.selected
             selectedCards.push({cardClicked, imageValue})
@@ -137,6 +138,8 @@
                 match = false
                 if (selectedCards[0].imageValue === selectedCards[1].imageValue){
                     match = true
+                    cards[selectedCards[0].cardClicked] = true
+                    cards[selectedCards[1].cardClicked] = true
                     selectedCards.pop()
                     selectedCards.pop()
                 }
@@ -146,17 +149,19 @@
             }
             this.setState(state => ({
                 selected: selectedCards,
+                movements: state.movements +1,
+                turnedCards: cards,
             }));
-            console.log(this.state.selected)
+            console.log(this.state.turnedCards)
             //click en carta
-            const cards = this.state.turnedCards.slice()
+            /*const cards = this.state.turnedCards.slice()
             if(cards[cardClicked] === null){
                 cards[cardClicked] = imageValue
                 this.setState(state => ({
                     turnedCards: cards,
                     movements: state.movements+1,
                 }));
-            }
+            }*/
             //console.log(cards)
             return match 
         }
@@ -166,7 +171,7 @@
         isGameOver(){
             let end = true
             this.state.turnedCards.forEach(element => {
-                if(element === null){
+                if(!element){
                     end = false
                     return end
                 }
