@@ -7,6 +7,7 @@
     <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>¡Memoria!</title>
 </head>
 <body>
@@ -21,15 +22,29 @@
                 image: `${this.props.cardImage}`,
             };
             this.handleClick = this.handleClick.bind(this);
+            this.flipCard = this.flipCard.bind(this);
+            /*setTimeout(() => {
+                this.flipCard()
+            }, 3000);*/
         }
         handleClick() {
             if(!this.state.isTurned){
-                this.setState(state => ({
-                    isTurned: !state.isTurned,
-                    rotate: (state.rotate + 180)%360,
-                }));
-                this.props.afterClick()
+                if(!this.props.afterClick()){
+                    this.flipCard()
+                    setTimeout(function() {
+                        this.flipCard()
+                    }.bind(this), 1000);
+                }
+                else{
+                    this.flipCard()
+                }
             }
+        }
+        flipCard(){
+            this.setState(state => ({
+                isTurned: !state.isTurned,
+                rotate: (state.rotate + 180)%360,
+            }));
         }
         render(){
             const style = {
@@ -38,7 +53,7 @@
                 height: '90%',
                 borderRadius: '20px',
                 transformStyle: 'preserve-3d',
-                transition: 'all 0.8s ease',
+                transition: 'all 0.9s ease',
                 transform: `rotateY(${this.state.rotate}deg)`,
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -87,11 +102,14 @@
                     'images/happy_bunny.png', 
                     'images/happy_dog.png', 
                     'images/happy_gm.png', ],
+                cardLayout: Array(16).fill(null),
                 turnedCards: Array(16).fill(null),
+                movements: 0,
+                selected : [],
             };
-            console.log("constructor")
             this.createCards = this.createCards.bind(this);
             this.generateRandom = this.generateRandom.bind(this);
+            this.isGameOver = this.isGameOver.bind(this);
         }
         generateRandom(datasize){
             const number = Math.floor((Math.random() * datasize) + 0)
@@ -103,39 +121,80 @@
             const cards = []
             for (let i = 0; i < 16; i++) {
                 const index = this.generateRandom(imageIndexes.length)
-                console.log(imageIndexes[index])
                 cards.push(<Card cardImage={this.state.cardImages[imageIndexes[index]]} key={i} afterClick={this.onCardClick.bind(this, i, imageIndexes[index])}/>)
                 imageIndexes.splice(index, 1)
             }
-            return cards
+            this.setState(state => ({
+                cardLayout: cards
+            }));
         }
         onCardClick(cardClicked, imageValue){
+            let match = true
+            //verificacion si la carta es match 
+            const selectedCards = this.state.selected
+            selectedCards.push({cardClicked, imageValue})
+            if(selectedCards.length > 1){
+                match = false
+                if (selectedCards[0].imageValue === selectedCards[1].imageValue){
+                    match = true
+                    selectedCards.pop()
+                    selectedCards.pop()
+                }
+                else{
+                    selectedCards.pop()
+                }
+            }
+            this.setState(state => ({
+                selected: selectedCards,
+            }));
+            console.log(this.state.selected)
+            //click en carta
             const cards = this.state.turnedCards.slice()
             if(cards[cardClicked] === null){
                 cards[cardClicked] = imageValue
                 this.setState(state => ({
-                    turnedCards: cards
+                    turnedCards: cards,
+                    movements: state.movements+1,
                 }));
             }
-            console.log("click: ", cardClicked, " imageValue: ", imageValue, '\n', this.state.turnedCards)
+            //console.log(cards)
+            return match 
+        }
+        componentDidMount(){
+            this.createCards()
+        }
+        isGameOver(){
+            let end = true
+            this.state.turnedCards.forEach(element => {
+                if(element === null){
+                    end = false
+                    return end
+                }
+            });
+            return end
         }
         render(){
-            const style = {
-                backgroundColor: 'green',
-                width: '1200px',
-                height: '1200px',
-                display: 'grid',
-                gridGap: '2% 2%',
-                gridTemplateColumns: '20% 20% 20% 20%',
-                alignItems: 'center',
-                justifyContent: 'center',
+            if(!this.isGameOver()){
+                return(
+                <div>
+                    <div className="board">
+                        {this.state.cardLayout}
+                    </div>
+                    <div>MOVIMIENTOS: {this.state.movements}</div>
+                </div>
+                )
             }
-            
-        return(
-              <div style={style}>
-                  {this.createCards()}
-              </div>
-            )
+            else{
+                return(
+                <div>
+                    <div className="board">
+                        {this.state.cardLayout}
+                    </div>
+                    <div>MOVIMIENTOS: {this.state.movements}</div>
+                    <div>JUEGO FINALIZADO</div>
+                </div>
+                )
+            }
         }
     }
     ReactDOM.render(
