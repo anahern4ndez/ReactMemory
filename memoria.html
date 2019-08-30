@@ -19,6 +19,7 @@
                 isTurned: true,
                 rotate : 0,
                 image: `${this.props.cardImage}`,
+                imageId: `${this.props.imageId}`,
             };
             // This binding is necessary to make `this` work in the callback
             this.handleClick = this.handleClick.bind(this);
@@ -26,15 +27,14 @@
         handleClick(event) {
             this.setState(state => ({
                 isTurned: !state.isTurned,
-                rotate: (state.rotate + 180),
+                rotate: (state.rotate + 180)%360,
             }));
-            //console.log(event.currentTarget.style);
+            console.log(this.state.imageId)
             
         }
         render(){
             const style = {
                 display:'flex',
-                backgroundColor: 'white',
                 width: '90%',
                 height: '90%',
                 borderRadius: '20px',
@@ -50,19 +50,19 @@
                 height: '90%',
                 borderRadius: '20px',
                 backfaceVisibility: 'hidden',
-                background: 'blue',
-                //color: '#333',
                 backgroundImage: `url(images/happy.png)`,
+                backgroundColor: '#ffc728',
                 backgroundSize: '100% 100%',
+                border: '15px solid white',
             }
             const back = {
                 position: 'absolute',
                 width: '90%',
                 height: '90%',
+                border: '15px solid white',
                 borderRadius: '20px',
                 backfaceVisibility: 'hidden',
-                //color: '#333',
-                background: 'red',
+                backgroundColor: 'red',
                 backgroundImage: `url(${this.state.image})`,
                 backgroundSize: '100% 100%',
                 transform: `rotateY(180deg)`,
@@ -87,21 +87,25 @@
                     'images/happy_girl.png', 
                     'images/happy_bunny.png', 
                     'images/happy_dog.png', 
-                    'images/happy_banana.png', 
+                    'images/happy_gm.png', 
                     'images/happy_watermelon.png', ]
             };
             // This binding is necessary to make `this` work in the callback
             this.createCards = this.createCards.bind(this);
             this.generateRandom = this.generateRandom.bind(this);
         }
-        generateRandom(){
-            return Math.floor((Math.random() * this.state.cardImages.length) + 0)
+        generateRandom(datasize){
+            const number = Math.floor((Math.random() * datasize) + 0)
+            return number
         }
         createCards(){
+            //creacion de lista de numeros para las imagenes
+            const imageIndexes = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7]
             const cards = []
             for (let i = 0; i < 16; i++) {
-                const index = this.generateRandom()
-                cards.push(<Card cardImage={this.state.cardImages[index]} key={i}/>)
+                const index = this.generateRandom(imageIndexes.length)
+                cards.push(<Card cardImage={this.state.cardImages[imageIndexes[index]]} key={i} imageId={imageIndexes[index]}/>)
+                imageIndexes.splice(index, 1)
             }
             return cards
         }
