@@ -16,21 +16,20 @@
         constructor(props) {
             super(props);
             this.state = {
-                isTurned: true,
+                isTurned: false,
                 rotate : 0,
                 image: `${this.props.cardImage}`,
-                imageId: `${this.props.imageId}`,
             };
-            // This binding is necessary to make `this` work in the callback
             this.handleClick = this.handleClick.bind(this);
         }
-        handleClick(event) {
-            this.setState(state => ({
-                isTurned: !state.isTurned,
-                rotate: (state.rotate + 180)%360,
-            }));
-            console.log(this.state.imageId)
-            
+        handleClick() {
+            if(!this.state.isTurned){
+                this.setState(state => ({
+                    isTurned: !state.isTurned,
+                    rotate: (state.rotate + 180)%360,
+                }));
+                this.props.afterClick()
+            }
         }
         render(){
             const style = {
@@ -69,8 +68,8 @@
             }
             return (
                 <div style={style} onClick={this.handleClick}>
-                    <div style={front}> the front</div>
-                    <div style={back}> the back </div>
+                    <div style={front}/>
+                    <div style={back}/>
                 </div>
             )
         }
@@ -87,10 +86,10 @@
                     'images/happy_girl.png', 
                     'images/happy_bunny.png', 
                     'images/happy_dog.png', 
-                    'images/happy_gm.png', 
-                    'images/happy_watermelon.png', ]
+                    'images/happy_gm.png', ],
+                turnedCards: Array(16).fill(null),
             };
-            // This binding is necessary to make `this` work in the callback
+            console.log("constructor")
             this.createCards = this.createCards.bind(this);
             this.generateRandom = this.generateRandom.bind(this);
         }
@@ -104,10 +103,21 @@
             const cards = []
             for (let i = 0; i < 16; i++) {
                 const index = this.generateRandom(imageIndexes.length)
-                cards.push(<Card cardImage={this.state.cardImages[imageIndexes[index]]} key={i} imageId={imageIndexes[index]}/>)
+                console.log(imageIndexes[index])
+                cards.push(<Card cardImage={this.state.cardImages[imageIndexes[index]]} key={i} afterClick={this.onCardClick.bind(this, i, imageIndexes[index])}/>)
                 imageIndexes.splice(index, 1)
             }
             return cards
+        }
+        onCardClick(cardClicked, imageValue){
+            const cards = this.state.turnedCards.slice()
+            if(cards[cardClicked] === null){
+                cards[cardClicked] = imageValue
+                this.setState(state => ({
+                    turnedCards: cards
+                }));
+            }
+            console.log("click: ", cardClicked, " imageValue: ", imageValue, '\n', this.state.turnedCards)
         }
         render(){
             const style = {
