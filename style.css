@@ -15,8 +15,8 @@
 }
 
 .container{
-    width: 2400px;
-    height: 2400px;
+    width: 800px;
+    height: 800px;
     align-items: center;
     justify-content: center;
     position: relative;
@@ -26,16 +26,16 @@
 }
 .text{
     font-family: 'Quicksand';
-    font-size: 150px;
+    font-size: 50px;
     font-weight: bolder;
     color: aliceblue;
     background-color: rgba(0,0,0,0.5);
-    border-radius: 30px;
+    border-radius: 15px;
     width: fit-content;
-    padding: 25px;
+    padding: 15px;
     position: relative;
     top: 2%;
-    left: 25%;
+    left: 22%;
 }
 
 .frontCard{
@@ -47,17 +47,17 @@
     background-image: url('images/happy.png'), url('images/front.jpeg');
     background-color: #ffc728;
     background-size: 100% 100%;
-    border: 15px solid white;
+    border: 10px solid white;
 }
 .endText {
     background-color: rgba(0,0,0,0.5);
-    border-radius: 30px;
+    border-radius: 15px;
     width: fit-content;
-    padding: 50px;
+    padding: 20px;
     position: absolute;
-    top: 40%;
-    left: 5%;
+    top: 45%;
+    left: 15%;
     font-family: 'Fredericka the Great', cursive;
-    font-size: 200px;
+    font-size: 50px;
     color: aliceblue;
 }
