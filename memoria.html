@@ -18,14 +18,11 @@
             super(props);
             this.state = {
                 isTurned: false,
-                rotate : 0,
+                rotate : 180,
                 image: `${this.props.cardImage}`,
             };
             this.handleClick = this.handleClick.bind(this);
             this.flipCard = this.flipCard.bind(this);
-            /*setTimeout(() => {
-                this.flipCard()
-            }, 3000);*/
         }
         handleClick() {
             if(!this.state.isTurned){
@@ -45,6 +42,13 @@
                 isTurned: !state.isTurned,
                 rotate: (state.rotate + 180)%360,
             }));
+        }
+        componentDidMount(){
+            setTimeout(function() {
+                this.setState(state => ({
+                    rotate: (state.rotate + 180)%360,
+                }));
+            }.bind(this), 2000);
         }
         render(){
             const style = {
@@ -72,9 +76,7 @@
             }
             return (
                 <div style={style} onClick={this.handleClick}>
-                    <div className="frontCard">
-                        fjdksalfjdksal
-                    </div>
+                    <div className="frontCard"/>
                     <div style={back}/>
                 </div>
             )
@@ -143,17 +145,6 @@
                 movements: state.movements +1,
                 turnedCards: cards,
             }));
-            console.log(this.state.turnedCards)
-            //click en carta
-            /*const cards = this.state.turnedCards.slice()
-            if(cards[cardClicked] === null){
-                cards[cardClicked] = imageValue
-                this.setState(state => ({
-                    turnedCards: cards,
-                    movements: state.movements+1,
-                }));
-            }*/
-            //console.log(cards)
             return match 
         }
         componentDidMount(){
