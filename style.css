@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Fredericka+the+Great&display=swap');
 
 .board{
     width: 80%;
@@ -21,7 +22,7 @@
     position: relative;
     background-repeat: no-repeat;
     background-size: cover;
-    background-image: url('images/background.png');
+    background-image: url('images/fruits.png');
 }
 .text{
     font-family: 'Quicksand';
@@ -38,8 +39,14 @@
     height: 90%;
     border-radius: 20px;
     backface-visibility: hidden;
-    background-image: url('images/happy.png');
+    background-image: url('images/happy.png'), url('images/front.jpeg');
     background-color: #ffc728;
     background-size: 100% 100%;
     border: 15px solid white;
+}
+.endText{
+    font-family: 'Fredericka the Great', cursive;
+    font-size: 100px;
+    font-weight: bolder;
+    color: aliceblue;
 }
