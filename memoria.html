@@ -58,17 +58,6 @@
                 alignItems: 'center',
                 justifyContent: 'center',
             }
-            const front = {
-                position: 'absolute',
-                width: '90%',
-                height: '90%',
-                borderRadius: '20px',
-                backfaceVisibility: 'hidden',
-                backgroundImage: `url(images/happy.png)`,
-                backgroundColor: '#ffc728',
-                backgroundSize: '100% 100%',
-                border: '15px solid white',
-            }
             const back = {
                 position: 'absolute',
                 width: '90%',
@@ -83,13 +72,13 @@
             }
             return (
                 <div style={style} onClick={this.handleClick}>
-                    <div style={front}/>
+                    <div className="frontCard"/>
                     <div style={back}/>
                 </div>
             )
         }
     }
-    class Game extends React.Component{
+    class Board extends React.Component{
         constructor(props) {
             super(props);
             this.state = {
@@ -181,29 +170,36 @@
         render(){
             if(!this.isGameOver()){
                 return(
-                <div>
+                <div className="container">
                     <div className="board">
                         {this.state.cardLayout}
                     </div>
-                    <div>MOVIMIENTOS: {this.state.movements}</div>
+                    <div className="text">MOVIMIENTOS: {this.state.movements}</div>
                 </div>
                 )
             }
             else{
                 return(
-                <div>
+                <div className="container">
                     <div className="board">
                         {this.state.cardLayout}
                     </div>
-                    <div>MOVIMIENTOS: {this.state.movements}</div>
+                    <div className="text">MOVIMIENTOS: {this.state.movements}</div>
                     <div>JUEGO FINALIZADO</div>
                 </div>
                 )
             }
         }
     }
+    class Container extends React.Component{
+        render(){
+            return(
+                <Board />
+            )
+        }
+    }
     ReactDOM.render(
-        < Game />,
+        < Container />,
         document.getElementById('root')
     );
     </script>
